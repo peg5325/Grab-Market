@@ -2,6 +2,7 @@
   <head>
     <title>그랩마켓</title>
     <link rel="stylesheet" href="index.css" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
@@ -15,37 +16,52 @@
         <img src="images/banners/banner1.png" />
       </div>
       <h1>판매되는 상품들</h1>
-      <div id="product-list">
-        <div class="product-card">
-          <div>
-            <img class="product-img" src="images/products/basketball1.jpeg" />
-          </div>
-          <div class="product-contents">
-            <span class="product-name">농구공 1호</span>
-            <span class="product-price">50,000 원</span>
-            <div class="product-seller">
-              <img class="product-avatar" src="images/icons/avatar.png" />
-              <span>그랩</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div>
-            <img class="product-img" src="images/products/keyboard1.jpg" />
-          </div>
-          <div class="product-contents">
-            <span class="product-name">키보드 1호</span>
-            <span class="product-price">30,000 원</span>
-            <div class="product-seller">
-              <img class="product-avatar" src="images/icons/avatar.png" />
-              <span>그랩</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="product-list"></div>
       <div id="product-list"></div>
     </div>
     <div id="footer"></div>
   </body>
+  <script>
+    axios
+      .get(
+        "https://768b774f-43b6-46e0-8d90-bb6ec607ae76.mock.pstmn.io/products"
+      )
+      .then(function (result) {
+        console.log("통신 결과 : ", result);
+        const products = result.data.products;
+
+        let productHtml = "";
+
+        for (var i = 0; i < products.length; i++) {
+          let product = products[i];
+          productHtml +=
+            `<div class="product-card">
+              <div>
+                <img class="product-img" src="` +
+            product.imageUrl +
+            `" />
+              </div>
+              <div class="product-contents">
+                <span class="product-name">` +
+            product.name +
+            `</span>
+                <span class="product-price">` +
+            product.price +
+            ` 원</span>
+                <div class="product-seller">
+                  <img class="product-avatar" src="images/icons/avatar.png" />
+                  <span>` +
+            product.seller +
+            `</span>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        document.querySelector("#product-list").innerHTML = productHtml;
+      })
+      .catch(function (error) {
+        console.error("error 발생 : ", error);
+      });
+  </script>
 </html>
